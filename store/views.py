@@ -6,17 +6,8 @@ from django.contrib import messages
 from django.db.models import Q, F, Sum
 from django.conf import settings
 from django.utils import timezone
-import json
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
-from urllib3 import request
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.conf import settings
-from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponseBadRequest
 import json
 
 from .models import (
