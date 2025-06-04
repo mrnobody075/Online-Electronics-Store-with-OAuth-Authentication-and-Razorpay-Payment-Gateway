@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Profile | EComStore{% endblock %}
+{% block content %}
+<div class="container" style="max-width:800px;">
+  <h2 class="mb-3" style="color:#58a6ff;">Profile</h2>
+  <form method="post" class="mb-4">
+    {% csrf_token %}
+    {{ profile_form.as_p }}
+    <button type="submit" name="profile_submit" class="btn btn-primary">Update Profile</button>
+  </form>
+
+  <div class="row mb-4">
+    <div class="col-md-6 mb-4">
+      <h5 style="color:#58a6ff;">Phone Numbers</h5>
+      <form method="post" class="d-flex mb-2" style="gap:8px;">
+        {% csrf_token %}
+        {{ phone_form.number }}
+        <button type="submit" name="add_phone" class="btn btn-success btn-sm">Add</button>
+      </form>
+      <ul>
+        {% for phone in phones %}
+          <li class="d-flex align-items-center justify-content-between">
+            {{ phone.number }}
+            <form method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" name="delete_phone" value="{{ phone.id }}" class="btn btn-danger btn-sm ms-2">Delete</button>
+            </form>
+          </li>
+        {% empty %}
+          <li class="text-muted">No phone numbers.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-md-6 mb-4">
+      <h5 style="color:#58a6ff;">Addresses</h5>
+      <form method="post" class="mb-2">
+        {% csrf_token %}
+        <div class="row g-2">
+          <div class="col-12">{{ address_form.address_line }}</div>
+          <div class="col-md-6">{{ address_form.city }}</div>
+          <div class="col-md-6">{{ address_form.state }}</div>
+          <div class="col-md-6">{{ address_form.postal_code }}</div>
+          <div class="col-md-6">{{ address_form.country }}</div>
+        </div>
+        <button type="submit" name="add_address" class="btn btn-success btn-sm mt-2">Add</button>
+      </form>
+      <ul>
+        {% for addr in addresses %}
+          <li class="d-flex align-items-center justify-content-between">
+            {{ addr.address_line }}, {{ addr.city }}, {{ addr.state }}, {{ addr.country }}
+            <form method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" name="delete_address" value="{{ addr.id }}" class="btn btn-danger btn-sm ms-2">Delete</button>
+            </form>
+          </li>
+        {% empty %}
+          <li class="text-muted">No addresses.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+  <h4 style="color:#58a6ff;">Cart</h4>
+  <ul>
+    {% for item in cart_items %}
+      <li>{{ item.product.name }} x{{ item.quantity }}</li>
+    {% empty %}
+      <li class="text-muted">Cart is empty.</li>
+    {% endfor %}
+  </ul>
+  <hr>
+  <h4 style="color:#58a6ff;">Order History</h4>
+  <ul>
+    {% for order in orders %}
+      <li>
+        Order #{{ order.id }} ({{ order.date_of_purchase|date:"M d, Y" }}) - {{ order.delivery_status|title }}
+      </li>
+    {% empty %}
+      <li class="text-muted">No orders yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

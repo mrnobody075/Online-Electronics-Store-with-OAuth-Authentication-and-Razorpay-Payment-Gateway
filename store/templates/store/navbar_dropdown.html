@@ -1,0 +1,73 @@
+<div class="d-flex align-items-center">
+  <!-- Logout Button -->
+  <form method="post" action="{% url 'logout' %}" class="me-3 mb-0">
+    {% csrf_token %}
+    <button type="submit" style="
+      background:#f85149;
+      color:#fff;
+      font-weight:600;
+      font-size:1.07rem;
+      border:none;
+      border-radius:8px;
+      padding:7px 26px;
+      box-shadow:none;
+      cursor:pointer;
+      transition:background 0.15s;">
+      Logout
+    </button>
+  </form>
+
+  <!-- Dropdown Menu -->
+  <div class="dropdown">
+    <button class="btn btn-dark dropdown-toggle d-flex align-items-center"
+      type="button"
+      id="userMenuDropdown"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      style="
+        background:#161b22;
+        color:#c9d1d9;
+        font-size:1.13rem;
+        font-weight:500;
+        border:1px solid #30363d;
+        border-radius:8px;
+        padding:7px 22px;
+        margin-right:6px;
+      ">
+      <i class="fa fa-bars me-2"></i> Menu
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuDropdown" style="background:#161b22; border:1px solid #30363d; min-width:175px;">
+      <li>
+        <span class="dropdown-item-text" style="color:#8b949e; font-size:0.98rem;">
+          Hi, {{ user.get_full_name|default:user.username }}
+        </span>
+      </li>
+      <li><hr class="dropdown-divider" style="border-top:1px solid #30363d;"></li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center" href="{% url 'home' %}" style="color:#c9d1d9;">
+          <i class="fa fa-home me-2"></i> Home
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center" href="{% url 'cart' %}" style="color:#c9d1d9;">
+          <i class="fa fa-shopping-cart me-2"></i> Cart
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center" href="{% url 'orders' %}" style="color:#c9d1d9;">
+          <i class="fa fa-list me-2"></i> Orders
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center" href="{% url 'wishlist' %}" style="color:#c9d1d9;">
+          <i class="fa fa-heart me-2"></i> Wishlist
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}" style="color:#c9d1d9;">
+          <i class="fa fa-user me-2"></i> Profile
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

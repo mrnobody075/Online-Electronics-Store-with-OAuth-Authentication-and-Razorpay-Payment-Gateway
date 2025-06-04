@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Home | EComStore{% endblock %}
+{% block content %}
+    <div class="container py-3" style="max-width: 1080px;">
+        <!-- Search Bar -->
+        <form method="get" action="{% url 'product_search' %}" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control github-input" placeholder="Search products..."
+                       style="background:#161B22; color:#C9D1D9; border-right:0;">
+                <button class="btn" type="submit" style="background:#238636; color:#fff; border-radius:0 6px 6px 0;">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </form>
+
+        <!-- Categories -->
+        <div class="mb-4" style="overflow-x:auto;">
+            <div style="display: flex; gap: 1rem; flex-wrap: nowrap;">
+                <a href="{% url 'home' %}" class="btn btn-sm"
+                   style="background:#30363d; color:#C9D1D9; border-radius:16px; font-weight:500;">All</a>
+                {% for category in categories %}
+                    <a href="{% url 'category_products' category.slug %}" class="btn btn-sm"
+                       style="background:#21262d; color:#58a6ff; border-radius:16px; font-weight:500;">
+                        {{ category.name }}
+                    </a>
+                {% empty %}
+                    <span style="color:#b0b9d1;">No categories</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="row g-4">
+            {% for product in products %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+
+                    <div class="card h-100"
+                         style="background:#161B22; border:1px solid #30363d; border-radius:10px; box-shadow:none;">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}"
+                             style="border-radius:10px 10px 0 0; object-fit:cover; height:180px; background:#222;">
+                        <div class="card-body">
+                            <a href="{% url 'product_detail' product.id %}"
+                               style="color:#F0F6FC; font-size:1.14rem; font-weight:600; text-decoration:none;">
+                                {{ product.name }}
+                            </a>
+                            <p class="card-text"
+                               style="color:#8b949e; font-size:0.96rem;">{{ product.category.name }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span style="color:#58a6ff; font-size:1.01rem; font-weight:600;">₹{{ product.cost }}</span>
+                                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-sm"
+                                   style="background:#238636; color:#fff; border-radius:6px;">
+                                    <i class="fa fa-cart-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col">
+                    <div style="color:#b0b9d1; text-align:center;">No products found.</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_head %}
+    <style>
+        /* Responsive category pills - horizontal scroll */
+        .category-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .category-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Product card hover */
+        .card:hover {
+            border-color: #58a6ff;
+            box-shadow: 0 0 8px 0 #58a6ff24;
+            transition: border 0.18s, box-shadow 0.18s;
+        }
+    </style>
+{% endblock %}
+
+{% block extra_js %}
+    <!-- Optionally add JavaScript for enhanced UI -->
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Wishlist | EComStore{% endblock %}
+{% block content %}
+<div class="container" style="max-width:900px;">
+  <h2 class="mb-4" style="color:#58a6ff;">Your Wishlist</h2>
+  {% if wishlist_items %}
+    <div class="table-responsive">
+      <table class="table align-middle" style="background:#161b22; color:#c9d1d9; border-radius:10px; overflow:hidden;">
+        <thead>
+          <tr style="border-bottom:1.5px solid #30363d;">
+            <th scope="col"></th>
+            <th scope="col" style="min-width:180px;">Product</th>
+            <th scope="col">Price</th>
+            <th scope="col">Added On</th>
+            <th scope="col" class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for item in wishlist_items %}
+          <tr style="border-bottom:1px solid #222;">
+            <td>
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:58px; height:58px; object-fit:cover; border-radius:8px; background:#222;">
+            </td>
+            <td>
+              <div style="font-weight:600; color:#f0f6fc;">{{ item.product.name }}</div>
+              <div style="color:#8b949e; font-size:0.97em;">{{ item.product.category.name }}</div>
+            </td>
+            <td>
+              <span style="color:#58a6ff; font-weight:600;">₹{{ item.product.cost }}</span>
+            </td>
+            <td>
+              <span style="color:#8b949e;">{{ item.added_at|date:"M d, Y" }}</span>
+            </td>
+            <td class="text-center">
+              <form method="post" action="{% url 'move_to_cart' item.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-sm" style="border-radius:6px;">
+                  <i class="fa fa-cart-plus"></i> Move to Cart
+                </button>
+              </form>
+              <form method="post" action="{% url 'remove_from_wishlist' item.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm" style="border-radius:6px;">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="text-center my-5" style="color:#8b949e; font-size:1.22rem;">
+      <i class="fa fa-heart fa-3x mb-3" style="color:#30363d;"></i><br>
+      Your wishlist is empty!
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

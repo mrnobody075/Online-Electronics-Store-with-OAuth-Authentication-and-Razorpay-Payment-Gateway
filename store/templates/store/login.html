@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Login | EComStore{% endblock %}
+{% block content %}
+    <div class="github-card" style="margin-top: 50px;">
+        <form method="post" style="max-width:340px; margin:0 auto;">
+            {% csrf_token %}
+
+            <label class="github-label" for="{{ form.username.id_for_label }}" style="text-align:left;">Username</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="text-danger small">{{ form.username.errors|striptags }}</div>
+            {% endif %}
+
+            <label class="github-label" for="{{ form.password.id_for_label }}" style="text-align:left;">Password</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+                <div class="text-danger small">{{ form.password.errors|striptags }}</div>
+            {% endif %}
+
+            <button type="submit" class="github-btn"
+                    style="max-width:170px; margin: 0.7rem auto 0 auto; display:block;">Login
+            </button>
+        </form>
+        <div class="github-footer-text">
+            Don't have an account?
+            <a href="{% url 'signup' %}">Sign Up</a>
+        </div>
+        <a class="btn btn-outline-primary w-100 mb-2"
+           href="{% url 'social:begin' 'google-oauth2' %}">
+            <i class="fab fa-google"></i> Login with Google
+        </a>
+    </div>
+{% endblock %}

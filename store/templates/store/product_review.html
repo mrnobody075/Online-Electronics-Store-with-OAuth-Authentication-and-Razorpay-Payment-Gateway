@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Review {{ product.name }} | EComStore{% endblock %}
+
+{% block content %}
+<div class="container my-4" style="max-width:600px;">
+  <h2>Write a Review for <span style="color:#58a6ff;">{{ product.name }}</span></h2>
+  <div class="mb-4">
+    <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-link">&larr; Back to Product Page</a>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label">Your Rating</label>
+      <div id="star-select" class="d-flex gap-1">
+        {% for i in "54321" %}
+          <input type="radio" name="stars" id="star{{ i }}" value="{{ i }}" class="d-none" {% if form.stars.value|stringformat:"s" == i %}checked{% endif %}>
+          <label for="star{{ i }}" class="star-label" title="{{ i }} star{% if i != '1' %}s{% endif %}">&#9733;</label>
+        {% endfor %}
+      </div>
+      {% if form.stars.errors %}
+        <div class="text-danger">{{ form.stars.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="id_review_text" class="form-label">Your Review</label>
+      <textarea name="review_text" cols="40" rows="5" class="form-control" id="id_review_text" required>{{ form.review_text.value|default_if_none:'' }}</textarea>
+      {% if form.review_text.errors %}
+        <div class="text-danger">{{ form.review_text.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit Review</button>
+  </form>
+
+  <hr class="my-5">
+
+  <h4>Recent Reviews for {{ product.name }}</h4>
+  {% if reviews %}
+    {% for review in reviews %}
+      <div class="border rounded p-3 mb-3">
+        <div>
+          {% for i in "12345" %}
+            {% if review.stars >= forloop.counter %}
+              <span style="color:gold">&#9733;</span>
+            {% else %}
+              <span style="color:#ccc">&#9733;</span>
+            {% endif %}
+          {% endfor %}
+          <span class="ms-2 text-secondary">by {{ review.customer.user.username }}</span>
+          {% if review.created_at %}
+            <span class="ms-2 text-muted" style="font-size:0.9rem;">{{ review.created_at|date:"M d, Y" }}</span>
+          {% endif %}
+        </div>
+        <div class="mt-2">{{ review.review_text|linebreaks }}</div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="text-muted">No reviews yet. Be the first to review this product!</div>
+  {% endif %}
+</div>
+
+<style>
+  .star-label {
+    font-size: 1.7rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  input[name="stars"]:checked ~ label,
+  .star-label:hover,
+  .star-label:hover ~ .star-label {
+    color: gold !important;
+  }
+
+  input[name="stars"]:checked + label {
+    color: gold;
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,65 @@
+<div style="display:flex; flex-direction:column; align-items:flex-start; gap:16px; margin-top:20px;">
+  <form method="post" action="{% url 'logout' %}" style="margin-bottom:10px;">
+    {% csrf_token %}
+    <button type="submit" style="
+      background:#f85149;
+      color:#fff;
+      font-weight:600;
+      font-size:1.17rem;
+      border:none;
+      border-radius:8px;
+      padding:7px 28px;
+      margin-left:12px;
+      margin-bottom:8px;
+      box-shadow:none;
+      cursor:pointer;
+      transition:background 0.15s;
+      ">
+      Logout
+    </button>
+  </form>
+
+  <div style="margin-left:13px; color:#d1d5db; font-size:1.2rem; font-weight:500;">Hi, {{ user.get_full_name|default:user.username }}</div>
+
+  <a href="{% url 'home' %}" class="sidebar-btn">
+    <i class="fa fa-home"></i> Home
+  </a>
+  <a href="{% url 'cart' %}" class="sidebar-btn">
+    <i class="fa fa-shopping-cart"></i> Cart
+  </a>
+  <a href="{% url 'orders' %}" class="sidebar-btn">
+    <i class="fa fa-list"></i> Orders
+  </a>
+  <a href="{% url 'wishlist' %}" class="sidebar-btn">
+    <i class="fa fa-heart"></i> Wishlist
+  </a>
+  <a href="{% url 'profile' %}" class="sidebar-btn">
+    <i class="fa fa-user"></i> Profile
+  </a>
+</div>
+
+<style>
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #c9d1d9;
+  font-size: 1.25rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 6px 0 6px 13px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+  margin-left: 0.2em;
+}
+.sidebar-btn:hover {
+  background: #21262d;
+  color: #58a6ff;
+  text-decoration: none;
+}
+.sidebar-btn i {
+  font-size: 1.35em;
+  width: 1.7em;
+  text-align: center;
+}
+</style>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Orders | EComStore{% endblock %}
+{% block content %}
+<h2>Your Orders</h2>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+{% if orders %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Price Bought At</th>
+      <th>Order ID</th>
+      <th>Delivery Date</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+      {% for item in order.items.all %}
+      <tr>
+        <td>
+          {{ item.product.name }}
+          {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:40px;height:40px;">
+          {% endif %}
+        </td>
+        <td>{{ item.quantity }}</td>
+        <td>₹{{ item.price }}</td>
+        <td>{{ order.id }}</td>
+        <td>{{ order.date_of_purchase|date:"Y-m-d" }}</td>
+        <td>{{ order.get_delivery_status_display }}</td>
+        <td>
+          <form action="{% url 'add_to_cart' item.product.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-primary">Buy Again</button>
+          </form>
+          <a href="{%  url 'product_review' item.product.id %}" class="btn btn-sm btn-secondary">Review</a>
+        </td>
+      </tr>
+      {% endfor %}
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div class="alert alert-info">You have no orders yet.</div>
+{% endif %}
+{% endblock %}

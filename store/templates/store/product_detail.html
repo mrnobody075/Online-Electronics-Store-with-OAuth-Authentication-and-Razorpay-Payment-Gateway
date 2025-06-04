@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} | EComStore{% endblock %}
+<style>
+    .text-muted{
+        color: aliceblue;
+    }
+</style>
+{% block content %}
+<div class="container my-4">
+  <div class="row">
+    <!-- Product Image -->
+    <div class="col-md-5">
+
+        <img src="{{ product.image.url }}" class="img-fluid border" alt="{{ product.name }}">
+
+    </div>
+    <!-- Product Info -->
+    <div class="col-md-7">
+      <div class="mb-2">
+        <span>Brand:</span>
+        <strong>{{ product.brand.name }}</strong>
+        &nbsp; | &nbsp;
+        <span>Category:</span>
+        <a href="{% url 'category_products' product.category.slug %}" class="text-decoration-underline">{{ product.category.name }}</a>
+      </div>
+      <!-- Product Name -->
+      <h2 class="mb-3" style="font-weight: 600;">{{ product.name }}</h2>
+      <!-- Price -->
+      <h3 class="text-success mb-3">₹{{ product.cost }}</h3>
+      <!-- Add to Cart and Wishlist -->
+      <div class="mb-3">
+        <form action="{% url 'add_to_cart' product.id %}" method="post" class="d-inline">
+          {% csrf_token %}
+          <button class="btn btn-primary btn-lg">Add to Cart</button>
+        </form>
+        <form action="{% url 'add_to_wishlist' product.id %}" method="post" class="d-inline ms-2">
+          {% csrf_token %}
+          <button class="btn btn-outline-secondary btn-lg">Add to Wishlist</button>
+        </form>
+      </div>
+      <!-- Description -->
+      <div class="mb-4">
+        <h5>Description</h5>
+        <p>{{ product.description|linebreaks }}</p>
+      </div>
+      <!-- Review Stars -->
+      <div class="mb-4">
+        <h5>Customer Reviews</h5>
+        <div style="font-size: 1.3rem;">
+          {% for i in "12345" %}
+            {% if avg_rating >= forloop.counter %}
+              <span style="color:gold">&#9733;</span>
+            {% else %}
+              <span style="color:#ccc">&#9733;</span>
+            {% endif %}
+          {% endfor %}
+          <span class="ms-2">({{ review_count }})</span>
+        </div>
+      </div>
+      <!-- Leave a Review -->
+      {% if user.is_authenticated %}
+      <div class="mb-4">
+        <a href="{% url 'product_review' product.id %}" class="btn btn-warning">Write a Review</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <!-- Product Reviews List -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <h4>Product Reviews</h4>
+      {% if reviews %}
+        {% for review in reviews %}
+        <div class="border rounded p-3 mb-3">
+          <div>
+            {% for i in "12345" %}
+              {% if review.stars >= forloop.counter %}
+                <span style="color:gold">&#9733;</span>
+              {% else %}
+                <span style="color:#ccc">&#9733;</span>
+              {% endif %}
+            {% endfor %}
+            <span class="ms-2 text-secondary">by {{ review.customer.user.username }}</span>
+          </div>
+          <div class="mt-2">{{ review.review_text|linebreaks }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div >No reviews yet. Be the first to review this product!</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Sign Up | EComStore{% endblock %}
+{% block content %}
+<div class="github-card" style="max-width:400px;margin:auto;">
+  <h2 class="mb-4" style="color:#58a6ff;">Create Account</h2>
+  <form method="post" autocomplete="off">
+    {% csrf_token %}
+    <label class="github-label" for="{{ form.username.id_for_label }}">Username</label>
+    {{ form.username }}
+    {% if form.username.errors %}
+      <div class="text-danger small">{{ form.username.errors|striptags }}</div>
+    {% endif %}
+
+    <label class="github-label" for="{{ form.email.id_for_label }}">Email</label>
+    {{ form.email }}
+    {% if form.email.errors %}
+      <div class="text-danger small">{{ form.email.errors|striptags }}</div>
+    {% endif %}
+
+    <label class="github-label" for="{{ form.password1.id_for_label }}">Password</label>
+    {{ form.password1 }}
+    {% if form.password1.errors %}
+      <div class="text-danger small">{{ form.password1.errors|striptags }}</div>
+    {% endif %}
+
+    <label class="github-label" for="{{ form.password2.id_for_label }}">Confirm Password</label>
+    {{ form.password2 }}
+    {% if form.password2.errors %}
+      <div class="text-danger small">{{ form.password2.errors|striptags }}</div>
+    {% endif %}
+
+    <button type="submit" class="github-btn w-100 mt-3">Sign Up</button>
+  </form>
+<a class="btn btn-outline-primary w-100 mb-2"
+   href="{% url 'social:begin' 'google-oauth2' %}">
+   <i class="fab fa-google"></i> Sign Up with Google
+</a>
+  <div class="github-footer-text mt-3">
+    Already have an account?
+    <a href="{% url 'login' %}">Login</a>
+  </div>
+</div>
+{% endblock %}
